@@ -63,7 +63,7 @@ def get_living_neighbors(
 
     def allowed(coord: tuple[int, int]):
         u, v = coord
-        return u >= 0 and u < SIZE_X and v >= 0 and v < SIZE_Y and cells[u][v] == 1
+        return 0 <= u < SIZE_X and 0 <= v < SIZE_Y and cells[u][v] == 1
 
     return list(filter(allowed, all_coordinates))
 
