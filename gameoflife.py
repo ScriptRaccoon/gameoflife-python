@@ -21,14 +21,11 @@ LIVE_TO_LIVE = [2, 3]
 DEAD_TO_LIVE = [3]
 """number of living neighbors required for a dead cell to become alife"""
 
-CELL_SYMBOLS = ["  ", "■ "]
+CELL_SYMBOLS = {False: "  ", True: "■ "}
 """symbols used for printing the cell (dead or alife)"""
 
-Binary = Literal[0, 1]
-"""Type of a binary number: 0 or 1"""
-
-BinaryMatrix = list[list[Binary]]
-"""Type of a 2-dimensional array with entries only 0 or 1"""
+BinaryMatrix = list[list[bool]]
+"""Type of a 2-dimensional array of booleans"""
 
 Coordinate = tuple[int, int]
 """Type of a 2-dimensional coordinate"""
@@ -40,13 +37,12 @@ def clear_console() -> None:
 
 
 def get_empty_cells() -> BinaryMatrix:
-    return [[0 for _ in range(SIZE_Y)] for _ in range(SIZE_X)]
+    return [[False for _ in range(SIZE_Y)] for _ in range(SIZE_X)]
 
 
 def get_random_cells() -> BinaryMatrix:
     return [
-        [cast(Binary, random.randint(0, 1)) for _ in range(SIZE_Y)]
-        for _ in range(SIZE_X)
+        [random.choice([True, False]) for _ in range(SIZE_Y)] for _ in range(SIZE_X)
     ]
 
 
@@ -66,12 +62,7 @@ def get_living_neighbors(
 
     def is_living(coord: Coordinate):
         u, v = coord
-        return (
-            0 <= u < SIZE_X
-            and 0 <= v < SIZE_Y
-            and (u, v) != (x, y)
-            and cells[u][v] == 1
-        )
+        return 0 <= u < SIZE_X and 0 <= v < SIZE_Y and (u, v) != (x, y) and cells[u][v]
 
     return list(filter(is_living, all_coordinates))
 
@@ -82,10 +73,8 @@ def get_next_cells(cells: BinaryMatrix) -> BinaryMatrix:
         for y in range(SIZE_Y):
             cell = cells[x][y]
             amount_living_neighbors = len(get_living_neighbors(cells, (x, y)))
-            if cell == 1:
-                next_cells[x][y] = 1 if amount_living_neighbors in LIVE_TO_LIVE else 0
-            else:
-                next_cells[x][y] = 1 if amount_living_neighbors in DEAD_TO_LIVE else 0
+            rule = LIVE_TO_LIVE if cell else DEAD_TO_LIVE
+            next_cells[x][y] = amount_living_neighbors in rule
     return next_cells
 
 
