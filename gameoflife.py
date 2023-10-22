@@ -7,7 +7,6 @@ Game of Life Simulation in the console
 import os
 import time
 import random
-from typing import Literal, cast
 
 SIZE_X = 60
 """size of the game in x-direction"""
@@ -21,14 +20,17 @@ LIVE_TO_LIVE = [2, 3]
 DEAD_TO_LIVE = [3]
 """number of living neighbors required for a dead cell to become alife"""
 
+SHOW_TIME = 0.5
+"""number of seconds a single generation is shown"""
+
 CELL_SYMBOLS = {False: "  ", True: "■ "}
 """symbols used for printing the cell (dead or alife)"""
 
 BinaryMatrix = list[list[bool]]
-"""Type of a 2-dimensional array of booleans"""
+"""type of a 2-dimensional array of booleans"""
 
 Coordinate = tuple[int, int]
-"""Type of a 2-dimensional coordinate"""
+"""type of a 2-dimensional coordinate"""
 
 
 def clear_console() -> None:
@@ -83,7 +85,7 @@ def main() -> None:
     while True:
         clear_console()
         print_cells(cells)
-        time.sleep(0.5)
+        time.sleep(SHOW_TIME)
         cells = get_next_cells(cells)
 
 
