@@ -5,8 +5,8 @@ Game of Life Simulation in the console
 # pylint: disable=missing-function-docstring
 
 import os
-import time
-import random
+from time import sleep
+from random import choice
 
 SIZE_X = 60
 """size of the game in x-direction"""
@@ -20,7 +20,7 @@ LIVE_TO_LIVE = [2, 3]
 DEAD_TO_LIVE = [3]
 """number of living neighbors required for a dead cell to become alife"""
 
-SHOW_TIME = 0.5
+SHOW_TIME = 0.1
 """number of seconds a single generation is shown"""
 
 CELL_SYMBOLS = {False: "  ", True: "■ "}
@@ -43,9 +43,7 @@ def get_empty_cells() -> BinaryMatrix:
 
 
 def get_random_cells() -> BinaryMatrix:
-    return [
-        [random.choice([True, False]) for _ in range(SIZE_Y)] for _ in range(SIZE_X)
-    ]
+    return [[choice([True, False]) for _ in range(SIZE_Y)] for _ in range(SIZE_X)]
 
 
 def print_cells(cells: BinaryMatrix) -> None:
@@ -85,7 +83,7 @@ def main() -> None:
     while True:
         clear_console()
         print_cells(cells)
-        time.sleep(SHOW_TIME)
+        sleep(SHOW_TIME)
         cells = get_next_cells(cells)
 
 
